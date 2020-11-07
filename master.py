@@ -45,6 +45,9 @@ class Board:
             for j in range(0, self.width):
                 self.data[self.get_position(
                     i, j)] += val_map.data[val_map.get_position(i, j)]
+    
+    def add_heat_source(self, x, y, amount):
+        self.data[(self.get_position(x,y))] = amount 
 
 # Calculates the amount of heat each parcel adjacent to the input parcel gets
 # Input:
@@ -105,19 +108,19 @@ def animate_heat_map(board):
     fig = plt.figure()
 
     data = np.reshape(board.data, (-1, board.length))
-    ax = sns.heatmap(data, vmin=0, vmax=10, cmap="seismic")
+    ax = sns.heatmap(data, vmin=0, vmax=10)
 
     def init():
         plt.clf()
-        ax = sns.heatmap(data, vmin=0, vmax=10, cmap="seismic")
+        ax = sns.heatmap(data, vmin=0, vmax=10)
 
     def animate(i):
         plt.clf()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
+        board.add_heat_source(2,1,10)
         data = np.reshape(board.data, (-1, board.length))
-
-        ax = sns.heatmap(data, vmin=0, vmax=10, cmap="seismic")
+        ax = sns.heatmap(data, vmin=0, vmax=10)
 
     anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
 
@@ -129,7 +132,7 @@ def main():
     board_data = [
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
-        0, 0, 10, 0, 0,
+        0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0
     ]
