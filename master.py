@@ -137,7 +137,7 @@ def animate_heat_map(board):
 
 def main():
     root = tk.Tk()
-    root.title("Task-Failed-Successfully!")  
+    root.title("Task-Failed-Successfully!") 
     length = ttk.Label(root, text = "Enter the length:").grid(column = 0, row = 0)
     width = ttk.Label(root, text = "Enter the width:").grid(column = 0, row = 2)  
     def click():   
@@ -146,7 +146,7 @@ def main():
     width_val = tk.StringVar()
     length_entered = ttk.Entry(root, width = 12, textvariable = length_val).grid(column = 0, row = 1)
     width_entered = ttk.Entry(root, width = 12, textvariable = width_val).grid(column = 0, row = 3)
-    button = ttk.Button(root, text = "submit", command = click).grid(column = 1, row = 4)  
+    button = ttk.Button(root, text = "submit", command = click).grid(column = 0, row = 5)  
     root.mainloop()
 
     board_length = int(length_val.get())
