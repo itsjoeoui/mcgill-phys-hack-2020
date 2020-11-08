@@ -29,9 +29,9 @@ def get_data():
     df.sort_values(by=['x', 'y'])
 
     size = int((len(df.index)))
-    lmao = [0 for x in range(size) for y in range(size)]
+    output = [0 for x in range(size) for y in range(size)]
 
     for index, row in df.iterrows():
-        lmao[get_position(int(row['x']), int(row['y']), size)] = int(df.iloc[index]['temp'])
+        output[get_position(int(row['x']), int(row['y']), size)] = int(df.iloc[index]['temp'])
 
-    return lmao
+    return output
