@@ -108,11 +108,11 @@ def animate_heat_map(board):
     fig = plt.figure()
 
     data = np.reshape(board.data, (-1, board.length))
-    ax = sns.heatmap(data, vmin=0, vmax=10)
+    ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
     def init():
         plt.clf()
-        ax = sns.heatmap(data, vmin=0, vmax=10)
+        ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
     def animate(i):
         plt.clf()
@@ -120,7 +120,7 @@ def animate_heat_map(board):
         board.apply_variations(val_map)
         board.add_heat_source(2,1,10)
         data = np.reshape(board.data, (-1, board.length))
-        ax = sns.heatmap(data, vmin=0, vmax=10)
+        ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
     anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
 
