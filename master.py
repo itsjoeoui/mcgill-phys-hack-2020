@@ -10,15 +10,12 @@ class Board:
         # Initialize the Board object
         self.length = length
         self.width = width
-        self.data = []
-        self.velocity = []
-        for i in range(width*length):
-                self.velocity.append(0)
+        self.velocity = [0 for i in range(width*length)]
         if data == 0:
-            for i in range(width*length):
-                self.data.append(0)
+            self.data = [0 for i in range(width*length)]
         else:
             self.data = data
+        self.max = max(self.data)
 
     def get_position(self, x, y):
         # Returns the index of the coordinate in the list
@@ -147,7 +144,7 @@ def animate_3d_heat_map(board):
     Z = np.asarray(np.reshape(board.data, (-1, board.width)))
     mappable = plt.cm.ScalarMappable(cmap = "jet")
     mappable.set_array(Z)
-    mappable.set_clim(0, 10)
+    mappable.set_clim(0, board.max)
 
     surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
 
@@ -162,7 +159,7 @@ def animate_3d_heat_map(board):
         board.apply_variations(val_map)
         Z = np.asarray(np.reshape(board.data, (-1, board.width)))
         surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
-        ax.set_zlim(0, 10)
+        ax.set_zlim(0, board.max)
 
     plot = [ax.plot_surface(X, Y, Z, color='0.75')]
 
