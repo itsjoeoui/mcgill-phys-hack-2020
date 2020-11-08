@@ -9,6 +9,9 @@ class Board:
         self.length = length
         self.width = width
         self.data = []
+        self.velocity = []
+        for i in range(width*length):
+                self.velocity.append(0)
         if data == 0:
             for i in range(width*length):
                 self.data.append(0)
@@ -40,11 +43,13 @@ class Board:
             print([int(self.data[i + x]) for x in range(self.length)])
 
     def apply_variations(self, val_map):
+        print([round(i,0) for i in self.velocity])
         # Apply the variations of heat to each heat parcel
         for i in range(0, self.length):
             for j in range(0, self.width):
-                self.data[self.get_position(
-                    i, j)] += val_map.data[val_map.get_position(i, j)]
+                self.data[self.get_position(i, j)] += val_map.data[val_map.get_position(i, j)]
+                self.data[self.get_position(i, j)] += self.velocity[val_map.get_position(i, j)]
+        self.velocity += val_map.data
     
     def add_heat_source(self, x, y, amount):
         self.data[(self.get_position(x,y))] = amount 
@@ -118,7 +123,7 @@ def animate_heat_map(board):
         plt.clf()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
-        board.add_heat_source(2,1,10)
+        # board.add_heat_source(2,1,10)
         data = np.reshape(board.data, (-1, board.length))
         ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
@@ -134,7 +139,7 @@ def main():
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
         0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0
+        0, 0, 0, 0, 10
     ]
 
     main_board = Board(board_length, board_width, board_data)
