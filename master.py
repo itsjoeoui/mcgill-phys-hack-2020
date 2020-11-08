@@ -43,8 +43,10 @@ class Board:
             print([int(self.data[i + x]) for x in range(self.length)])
 
     def apply_variations(self, val_map):
-        print([round(i,0) for i in self.velocity])
+        # print([round(i,0) for i in self.velocity])
         # Apply the variations of heat to each heat parcel
+        print(sum([i for i in self.data]))
+
         for i in range(0, self.length):
             for j in range(0, self.width):
                 self.data[self.get_position(i, j)] += val_map.data[val_map.get_position(i, j)]
@@ -80,7 +82,7 @@ def calculate_val(x, y, board):
     Volumetric heat capacity of air: 1.256 kJ m^−3 K^-1,
     Temperature of a parcel of air: T = Q * 1.256 * 0.1^-3
     '''
-    scale = 250
+    scale = 300
 
     k = 1.4
     A = 0.1**2
@@ -123,7 +125,10 @@ def animate_heat_map(board):
         plt.clf()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
-        # board.add_heat_source(2,1,10)
+        # board.add_heat_source(0,0,10)
+        # board.add_heat_source(0,9,10)
+        # board.add_heat_source(9,0,10)
+        # board.add_heat_source(9,9,10)
         data = np.reshape(board.data, (-1, board.length))
         ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
@@ -132,15 +137,12 @@ def animate_heat_map(board):
     plt.show()
 
 def main():
-    board_length = 5
-    board_width = 5
-    board_data = [
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0,
-        0, 0, 0, 0, 10
-    ]
+    board_length = 10
+    board_width = 10
+    board_data = [0 for x in range(board_length) for y in range(board_width)]
+    board_data[0] = 10
+
+    # print(board_data)
 
     main_board = Board(board_length, board_width, board_data)
 
