@@ -111,10 +111,11 @@ def det_distrib(board):
             val_map.data[val_map.get_position(i, j)] = -new_val
     return val_map
 
-def animate_heat_map(board):
+def animate_2d_heat_map(board):
     fig = plt.figure()
 
     data = np.reshape(board.data, (-1, board.length))
+
     ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
     def init():
@@ -135,6 +136,38 @@ def animate_heat_map(board):
     anim = animation.FuncAnimation(fig, animate, init_func=init, interval=100)
     plt.show()
 
+def animate_3d_heat_map(board):
+    fig = plt.figure()
+    
+    ax = fig.gca(projection='3d')
+
+    X = [i for i in range(0, board.width)]
+    Y = [j for j in range(0, board.length)]
+    X, Y = np.meshgrid(X, Y)
+    Z = np.asarray(np.reshape(board.data, (-1, board.width)))
+
+    surf = ax.plot_surface(X, Y, Z, cmap="jet", linewidth=0, antialiased=True)
+
+    def init():
+        ax.clear()
+        surf = ax.plot_surface(X, Y, Z, cmap="jet", linewidth=0, antialiased=True)
+
+    def animate(i):
+        ax.clear()
+        val_map = det_distrib(board)
+        board.apply_variations(val_map)
+        Z = np.asarray(np.reshape(board.data, (-1, board.width)))
+        surf = ax.plot_surface(X, Y, Z, cmap="jet", linewidth=0, antialiased=True)
+
+    plot = [ax.plot_surface(X, Y, Z, color='0.75')]
+
+    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
+
+    # Add a color bar which maps values to colors.
+    fig.colorbar(surf, shrink=0.5, aspect=5)
+
+    plt.show()
+
 def main():
     root = tk.Tk()
     root.title("Task-Failed-Successfully!") 
@@ -149,16 +182,15 @@ def main():
     button = ttk.Button(root, text = "submit", command = click).grid(column = 0, row = 5)  
     root.mainloop()
 
+    # Board parameters
     board_length = int(length_val.get())
     board_width = int(width_val.get())
     board_data = [0 for x in range(board_length) for y in range(board_width)]
     board_data[0] = 10
 
-    # print(board_data)
-
     main_board = Board(board_length, board_width, board_data)
-
-    animate_heat_map(main_board)
+    animate_3d_heat_map(main_board)
+    animate_2d_heat_map(main_board)
 
 if __name__ == "__main__":
     main()
