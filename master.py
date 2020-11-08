@@ -4,6 +4,7 @@ import numpy as np
 import seaborn as sns
 import tkinter as tk
 from tkinter import ttk
+import calculate
 
 class Board:
     def __init__(self, width, length, data):
@@ -54,6 +55,7 @@ class Board:
     
     def add_heat_source(self, x, y, amount):
         self.data[(self.get_position(x,y))] = amount 
+        self.max = amount
 
 # Calculates the amount of heat each parcel adjacent to the input parcel gets
 # Input:
@@ -157,13 +159,17 @@ def animate_3d_heat_map(board):
         ax.clear()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
+        # board.add_heat_source(0,0,10)
+        # board.add_heat_source(0,9,10)
+        # board.add_heat_source(9,0,10)
+        # board.add_heat_source(9,9,10)3
         Z = np.asarray(np.reshape(board.data, (-1, board.width)))
         surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
         ax.set_zlim(0, board.max)
 
     plot = [ax.plot_surface(X, Y, Z, color='0.75')]
 
-    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=250)
+    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
 
     plt.show()
 
@@ -185,15 +191,20 @@ def main():
     # board_length = int(length_val.get())
     # board_width = int(width_val.get())
 
-    board_length_2d = 5
-    board_width_2d = 5
-    board_data_2d = [0 for x in range(board_length_2d) for y in range(board_width_2d)]
-    board_data_2d[0] = 15
+    board_length_2d = 169
+    board_width_2d = 169
+    board_data_2d = calculate.get_data()
+    # board_data_2d[0] = 10
 
-    board_length_3d = 5
-    board_width_3d = 5
-    board_data_3d = [0 for x in range(board_length_3d) for y in range(board_width_3d)]
-    board_data_3d[0] = 15
+    board_length_3d = 169
+    board_width_3d = 169
+    board_data_3d = calculate.get_data()
+    # board_data_3d = [0 for x in range(board_length_3d) for y in range(board_width_3d)]
+
+    # board_data_3d[0] = 10
+    # board_data_3d[99] = 10
+    # board_data_3d[24] = 10
+    # board_data_3d[74] = 10
 
     primary_board = Board(board_length_2d, board_width_2d, board_data_2d)
     second_board = Board(board_length_3d, board_width_3d, board_data_3d)
