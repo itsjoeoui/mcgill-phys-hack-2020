@@ -113,11 +113,11 @@ def animate_2d_heat_map(board):
 
     data = np.reshape(board.data, (-1, board.length))
 
-    ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
+    ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
     def init():
         plt.clf()
-        ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
+        ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
     def animate(i):
         plt.clf()
@@ -128,7 +128,7 @@ def animate_2d_heat_map(board):
         # board.add_heat_source(9,0,10)
         # board.add_heat_source(9,9,10)
         data = np.reshape(board.data, (-1, board.length))
-        ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
+        ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
     anim = animation.FuncAnimation(fig, animate, init_func=init, interval=100)
     plt.show()
@@ -168,24 +168,26 @@ def animate_3d_heat_map(board):
     plt.show()
 
 def main():
-    root = tk.Tk()
-    root.title("Task-Failed-Successfully!") 
-    length = ttk.Label(root, text = "Enter the length:").grid(column = 0, row = 0)
-    width = ttk.Label(root, text = "Enter the width:").grid(column = 0, row = 2)  
-    def click():   
-        root.destroy()
-    length_val = tk.StringVar()  
-    width_val = tk.StringVar()
-    length_entered = ttk.Entry(root, width = 12, textvariable = length_val).grid(column = 0, row = 1)
-    width_entered = ttk.Entry(root, width = 12, textvariable = width_val).grid(column = 0, row = 3)
-    button = ttk.Button(root, text = "submit", command = click).grid(column = 0, row = 5)  
-    root.mainloop()
+    # root = tk.Tk()
+    # root.title("Task-Failed-Successfully!") 
+    # length = ttk.Label(root, text = "Enter the length:").grid(column = 0, row = 0)
+    # width = ttk.Label(root, text = "Enter the width:").grid(column = 0, row = 2)  
+    # def click():   
+    #     root.destroy()
+    # length_val = tk.StringVar()  
+    # width_val = tk.StringVar()
+    # length_entered = ttk.Entry(root, width = 12, textvariable = length_val).grid(column = 0, row = 1)
+    # width_entered = ttk.Entry(root, width = 12, textvariable = width_val).grid(column = 0, row = 3)
+    # button = ttk.Button(root, text = "submit", command = click).grid(column = 0, row = 5)  
+    # root.mainloop()
 
-    # Board parameters
-    board_length = int(length_val.get())
-    board_width = int(width_val.get())
+    # # Board parameters
+    # board_length = int(length_val.get())
+    # board_width = int(width_val.get())
+    board_length = 5
+    board_width = 5
     board_data = [0 for x in range(board_length) for y in range(board_width)]
-    board_data[0] = 10
+    board_data[0] = 15
 
     main_board = Board(board_length, board_width, board_data)
     animate_3d_heat_map(main_board)
