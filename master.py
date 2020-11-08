@@ -138,33 +138,35 @@ def animate_2d_heat_map(board):
 
 def animate_3d_heat_map(board):
     fig = plt.figure()
-    
+
     ax = fig.gca(projection='3d')
 
     X = [i for i in range(0, board.width)]
     Y = [j for j in range(0, board.length)]
     X, Y = np.meshgrid(X, Y)
     Z = np.asarray(np.reshape(board.data, (-1, board.width)))
+    mappable = plt.cm.ScalarMappable(cmap = "jet")
+    mappable.set_array(Z)
+    mappable.set_clim(0, 10)
 
-    surf = ax.plot_surface(X, Y, Z, cmap="jet", linewidth=0, antialiased=True)
+    surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
 
+    fig.colorbar(surf)
     def init():
         ax.clear()
-        surf = ax.plot_surface(X, Y, Z, cmap="jet", linewidth=0, antialiased=True)
+        surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
 
     def animate(i):
         ax.clear()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
         Z = np.asarray(np.reshape(board.data, (-1, board.width)))
-        surf = ax.plot_surface(X, Y, Z, cmap="jet", linewidth=0, antialiased=True)
+        surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
+        ax.set_zlim(0, 10)
 
     plot = [ax.plot_surface(X, Y, Z, color='0.75')]
 
-    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
-
-    # Add a color bar which maps values to colors.
-    fig.colorbar(surf, shrink=0.5, aspect=5)
+    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=250)
 
     plt.show()
 
