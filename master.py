@@ -44,7 +44,7 @@ class Board:
     def apply_variations(self, val_map):
         # print([round(i,0) for i in self.velocity])
         # Apply the variations of heat to each heat parcel
-        print(sum([i for i in self.data]))
+        # print(sum([i for i in self.data]))
 
         for i in range(0, self.length):
             for j in range(0, self.width):
@@ -130,7 +130,7 @@ def animate_2d_heat_map(board):
         data = np.reshape(board.data, (-1, board.length))
         ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
-    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=100)
+    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=250)
     plt.show()
 
 def animate_3d_heat_map(board):
@@ -184,15 +184,22 @@ def main():
     # # Board parameters
     # board_length = int(length_val.get())
     # board_width = int(width_val.get())
-    board_length = 5
-    board_width = 5
-    board_data = [0 for x in range(board_length) for y in range(board_width)]
-    board_data[0] = 15
 
-    main_board = Board(board_length, board_width, board_data)
-    animate_3d_heat_map(main_board)
-    animate_2d_heat_map(main_board)
+    board_length_2d = 5
+    board_width_2d = 5
+    board_data_2d = [0 for x in range(board_length_2d) for y in range(board_width_2d)]
+    board_data_2d[0] = 15
+
+    board_length_3d = 5
+    board_width_3d = 5
+    board_data_3d = [0 for x in range(board_length_3d) for y in range(board_width_3d)]
+    board_data_3d[0] = 15
+
+    primary_board = Board(board_length_2d, board_width_2d, board_data_2d)
+    second_board = Board(board_length_3d, board_width_3d, board_data_3d)
+
+    animate_2d_heat_map(primary_board)
+    animate_3d_heat_map(second_board)
 
 if __name__ == "__main__":
     main()
-
