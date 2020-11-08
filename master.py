@@ -2,6 +2,8 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import tkinter as tk
+from tkinter import ttk
 
 class Board:
     def __init__(self, width, length, data):
@@ -82,7 +84,7 @@ def calculate_val(x, y, board):
     Volumetric heat capacity of air: 1.256 kJ m^−3 K^-1,
     Temperature of a parcel of air: T = Q * 1.256 * 0.1^-3
     '''
-    scale = 300
+    scale = 200
 
     k = 1.4
     A = 0.1**2
@@ -99,7 +101,6 @@ def calculate_val(x, y, board):
 # Output: value map (changes)
 # Determine the instantaneous rate of change of heat of the system
 
-
 def det_distrib(board):
     val_map = Board(board.length, board.width, 0)
     for i in range(0, val_map.width):
@@ -109,7 +110,6 @@ def det_distrib(board):
             new_val = calculate_val(i, j, board)
             val_map.data[val_map.get_position(i, j)] = -new_val
     return val_map
-
 
 def animate_heat_map(board):
     fig = plt.figure()
@@ -132,13 +132,25 @@ def animate_heat_map(board):
         data = np.reshape(board.data, (-1, board.length))
         ax = sns.heatmap(data, vmin=0, vmax=10, cmap="jet")
 
-    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
-
+    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=100)
     plt.show()
 
 def main():
-    board_length = 10
-    board_width = 10
+    root = tk.Tk()
+    root.title("Task-Failed-Successfully!")  
+    length = ttk.Label(root, text = "Enter the length:").grid(column = 0, row = 0)
+    width = ttk.Label(root, text = "Enter the width:").grid(column = 0, row = 2)  
+    def click():   
+        root.destroy()
+    length_val = tk.StringVar()  
+    width_val = tk.StringVar()
+    length_entered = ttk.Entry(root, width = 12, textvariable = length_val).grid(column = 0, row = 1)
+    width_entered = ttk.Entry(root, width = 12, textvariable = width_val).grid(column = 0, row = 3)
+    button = ttk.Button(root, text = "submit", command = click).grid(column = 1, row = 4)  
+    root.mainloop()
+
+    board_length = int(length_val.get())
+    board_width = int(width_val.get())
     board_data = [0 for x in range(board_length) for y in range(board_width)]
     board_data[0] = 10
 
@@ -150,3 +162,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
