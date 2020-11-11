@@ -2,8 +2,6 @@ import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-import tkinter as tk
-from tkinter import ttk
 import calculate
 
 class Board:
@@ -125,10 +123,6 @@ def animate_2d_heat_map(board):
         plt.clf()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
-        # board.add_heat_source(0,0,10)
-        # board.add_heat_source(0,9,10)
-        # board.add_heat_source(9,0,10)
-        # board.add_heat_source(9,9,10)
         data = np.reshape(board.data, (-1, board.length))
         ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
@@ -159,10 +153,6 @@ def animate_3d_heat_map(board):
         ax.clear()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
-        # board.add_heat_source(0,0,10)
-        # board.add_heat_source(0,9,10)
-        # board.add_heat_source(9,0,10)
-        # board.add_heat_source(9,9,10)3
         Z = np.asarray(np.reshape(board.data, (-1, board.width)))
         surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
         ax.set_zlim(0, board.max)
@@ -174,37 +164,14 @@ def animate_3d_heat_map(board):
     plt.show()
 
 def main():
-    # root = tk.Tk()
-    # root.title("Task-Failed-Successfully!") 
-    # length = ttk.Label(root, text = "Enter the length:").grid(column = 0, row = 0)
-    # width = ttk.Label(root, text = "Enter the width:").grid(column = 0, row = 2)  
-    # def click():   
-    #     root.destroy()
-    # length_val = tk.StringVar()  
-    # width_val = tk.StringVar()
-    # length_entered = ttk.Entry(root, width = 12, textvariable = length_val).grid(column = 0, row = 1)
-    # width_entered = ttk.Entry(root, width = 12, textvariable = width_val).grid(column = 0, row = 3)
-    # button = ttk.Button(root, text = "submit", command = click).grid(column = 0, row = 5)  
-    # root.mainloop()
-
-    # # Board parameters
-    # board_length = int(length_val.get())
-    # board_width = int(width_val.get())
-
     board_length_2d = 169
     board_width_2d = 169
     board_data_2d = calculate.get_data('data.csv')
-    # board_data_2d[0] = 10
 
     board_length_3d = 169
     board_width_3d = 169
     board_data_3d = calculate.get_data('data.csv')
-    # board_data_3d = [0 for x in range(board_length_3d) for y in range(board_width_3d)]
-
-    # board_data_3d[0] = 10
-    # board_data_3d[99] = 10
-    # board_data_3d[24] = 10
-    # board_data_3d[74] = 10
+    print(len(board_data_3d))
 
     primary_board = Board(board_length_2d, board_width_2d, board_data_2d)
     second_board = Board(board_length_3d, board_width_3d, board_data_3d)
