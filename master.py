@@ -193,12 +193,12 @@ def main():
 
     board_length_2d = 169
     board_width_2d = 169
-    board_data_2d = calculate.get_data()
+    board_data_2d = calculate.get_data('data.csv')
     # board_data_2d[0] = 10
 
     board_length_3d = 169
     board_width_3d = 169
-    board_data_3d = calculate.get_data()
+    board_data_3d = calculate.get_data('data.csv')
     # board_data_3d = [0 for x in range(board_length_3d) for y in range(board_width_3d)]
 
     # board_data_3d[0] = 10

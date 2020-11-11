@@ -1,5 +1,6 @@
 import pandas
-def get_data():
+
+def get_data(file_name):
     def get_position(x, y, size):
         # Returns the index of the coordinate in the list
         if x in range(0, size) and y in range(0, size):
@@ -24,7 +25,7 @@ def get_data():
         for i in range(0, size**2, size):
             print([int(data[i + x]) for x in range(size)])
 
-    df = pandas.read_csv('data.csv')
+    df = pandas.read_csv(file_name)
 
     df.sort_values(by=['x', 'y'])
 
