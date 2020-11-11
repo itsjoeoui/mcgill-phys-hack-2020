@@ -1,3 +1,4 @@
+// Made by Hristo Sandev 
 const int rightTriggerPin = 5; // Trigger Pin of Ultrasonic Sensor
 const int rightEchoPin = 6; // Echo Pin of Ultrasonic Sensor
 const int frontTriggerPin = 2; // Trigger Pin of Ultrasonic Sensor
