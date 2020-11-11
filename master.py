@@ -3,23 +3,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import calculate
+import math
 
 class Board:
-    def __init__(self, width, length, data):
+    def __init__(self, data, size):
         # Initialize the Board object
-        self.length = length
-        self.width = width
-        self.velocity = [0 for i in range(width*length)]
+        self.size = size
         if data == 0:
-            self.data = [0 for i in range(width*length)]
+            self.data = [0 for i in range(size**2)]
         else:
             self.data = data
+        self.velocity = [0 for i in range(len(self.data))]
         self.max = max(self.data)
 
     def get_position(self, x, y):
         # Returns the index of the coordinate in the list
-        if x in range(0, self.width) and y in range(0, self.length):
-            return x * self.length + y
+        if x in range(0, self.size) and y in range(0, self.size):
+            return x * self.size + y
         raise ValueError("Position out of range!")
 
     def get_adjacent(self, x, y):
@@ -29,24 +29,24 @@ class Board:
             all_adjacent.append(self.get_position(x - 1, y))
         if y >= 1:
             all_adjacent.append(self.get_position(x, y - 1))
-        if y <= self.length - 2:
+        if y <= self.size - 2:
             all_adjacent.append(self.get_position(x, y + 1))
-        if x <= self.width - 2:
+        if x <= self.size - 2:
             all_adjacent.append(self.get_position(x + 1, y))
         return all_adjacent
 
     def display_board(self):
         # Simply display the board
-        for i in range(0, self.length * self.width, self.length):
-            print([int(self.data[i + x]) for x in range(self.length)])
+        for i in range(0, len(data), self.size):
+            print([int(self.data[i + x]) for x in range(self.size)])
 
     def apply_variations(self, val_map):
         # print([round(i,0) for i in self.velocity])
         # Apply the variations of heat to each heat parcel
         # print(sum([i for i in self.data]))
 
-        for i in range(0, self.length):
-            for j in range(0, self.width):
+        for i in range(0, self.size):
+            for j in range(0, self.size):
                 self.data[self.get_position(i, j)] += val_map.data[val_map.get_position(i, j)]
                 self.data[self.get_position(i, j)] += self.velocity[val_map.get_position(i, j)]
         self.velocity += val_map.data
@@ -59,7 +59,6 @@ class Board:
 # Input:
 # x, y: coords of the parcel to calculate
 # board: calculate changes from the board
-
 
 def calculate_val(x, y, board):
     # distribute_to: adjacent parcels to the parcel in question that receive heat
@@ -81,6 +80,7 @@ def calculate_val(x, y, board):
     Volumetric heat capacity of air: 1.256 kJ m^−3 K^-1,
     Temperature of a parcel of air: T = Q * 1.256 * 0.1^-3
     '''
+
     scale = 200
 
     k = 1.4
@@ -99,9 +99,9 @@ def calculate_val(x, y, board):
 # Determine the instantaneous rate of change of heat of the system
 
 def det_distrib(board):
-    val_map = Board(board.length, board.width, 0)
-    for i in range(0, val_map.width):
-        for j in range(0, val_map.length):
+    val_map = Board(0, board.size)
+    for i in range(0, val_map.size):
+        for j in range(0, val_map.size):
             # new_vals: list of modified adjacents
             # 2D list: List of vector. val[0]: x, val[1]: y, val[2]: value to add
             new_val = calculate_val(i, j, board)
@@ -111,7 +111,7 @@ def det_distrib(board):
 def animate_2d_heat_map(board):
     fig = plt.figure()
 
-    data = np.reshape(board.data, (-1, board.length))
+    data = np.reshape(board.data, (-1, board.size))
 
     ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
@@ -123,7 +123,7 @@ def animate_2d_heat_map(board):
         plt.clf()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
-        data = np.reshape(board.data, (-1, board.length))
+        data = np.reshape(board.data, (-1, board.size))
         ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
     anim = animation.FuncAnimation(fig, animate, init_func=init, interval=250)
@@ -134,10 +134,11 @@ def animate_3d_heat_map(board):
 
     ax = fig.gca(projection='3d')
 
-    X = [i for i in range(0, board.width)]
-    Y = [j for j in range(0, board.length)]
+    X = [i for i in range(0, board.size)]
+    Y = [j for j in range(0, board.size)]
     X, Y = np.meshgrid(X, Y)
-    Z = np.asarray(np.reshape(board.data, (-1, board.width)))
+    Z = np.asarray(np.reshape(board.data, (-1, board.size)))
+
     mappable = plt.cm.ScalarMappable(cmap = "jet")
     mappable.set_array(Z)
     mappable.set_clim(0, board.max)
@@ -145,6 +146,7 @@ def animate_3d_heat_map(board):
     surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
 
     fig.colorbar(surf)
+
     def init():
         ax.clear()
         surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
@@ -153,31 +155,25 @@ def animate_3d_heat_map(board):
         ax.clear()
         val_map = det_distrib(board)
         board.apply_variations(val_map)
-        Z = np.asarray(np.reshape(board.data, (-1, board.width)))
+        Z = np.asarray(np.reshape(board.data, (-1, board.size)))
         surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
         ax.set_zlim(0, board.max)
 
     plot = [ax.plot_surface(X, Y, Z, color='0.75')]
-
+    
     anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
-
     plt.show()
 
 def main():
-    board_length_2d = 169
-    board_width_2d = 169
     board_data_2d = calculate.get_data('data.csv')
+    board_size_2d = int(math.sqrt(len(board_data_2d)))
+    board_2d = Board(board_data_2d, board_size_2d)
+    animate_2d_heat_map(board_2d)
 
-    board_length_3d = 169
-    board_width_3d = 169
     board_data_3d = calculate.get_data('data.csv')
-    print(len(board_data_3d))
-
-    primary_board = Board(board_length_2d, board_width_2d, board_data_2d)
-    second_board = Board(board_length_3d, board_width_3d, board_data_3d)
-
-    animate_2d_heat_map(primary_board)
-    animate_3d_heat_map(second_board)
+    board_size_3d = int(math.sqrt(len(board_data_3d)))
+    board_3d = Board(board_data_3d, board_size_3d)
+    animate_3d_heat_map(board_3d)
 
 if __name__ == "__main__":
     main()
