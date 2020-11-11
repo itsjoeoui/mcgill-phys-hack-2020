@@ -1,9 +1,8 @@
 import pandas
-import math
 
-def get_data(file_name, clean_up = False, divide = 0):
+def get_data(file_name, clean_up=False, divide=0):
+
     def get_position(x, y, side_length):
-        
         # Returns the index of the coordinate in the list
         if x in range(0, side_length) and y in range(0, side_length):
             return x * side_length + y
@@ -22,13 +21,13 @@ def get_data(file_name, clean_up = False, divide = 0):
         output[get_position(int(row['x']), int(row['y']), side_length)] = int(df.iloc[index]['temp'])
 
     if clean_up:
-        checks = [(x,y) for x in range(0, side_length, divide) for y in range(0, side_length, divide)]
+        checks = [(x, y) for x in range(0, side_length, divide) for y in range(0, side_length, divide)]
         output_fixed = []
         for coor in checks:
             values = []
             for x in range(coor[0], coor[0] + divide):
                 for y in range(coor[1], coor[1] + divide):
-                    values.append(output[get_position(x,y, side_length)])
+                    values.append(output[get_position(x, y, side_length)])
             output_fixed.append(max(values))
         return output_fixed
     else:

@@ -1,9 +1,9 @@
+import math
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import calculate
-import math
 
 class Board:
     def __init__(self, data, size):
@@ -50,9 +50,9 @@ class Board:
                 self.data[self.get_position(i, j)] += val_map.data[val_map.get_position(i, j)]
                 self.data[self.get_position(i, j)] += self.velocity[val_map.get_position(i, j)]
         self.velocity += val_map.data
-    
+
     def add_heat_source(self, x, y, amount):
-        self.data[(self.get_position(x,y))] = amount 
+        self.data[(self.get_position(x, y))] = amount
         self.max = amount
 
 # Calculates the amount of heat each parcel adjacent to the input parcel gets
@@ -108,7 +108,7 @@ def det_distrib(board):
             val_map.data[val_map.get_position(i, j)] = -new_val
     return val_map
 
-def animate_2d_heat_map(board, anim = True):
+def animate_2d_heat_map(board, anim=True):
     fig = plt.figure()
 
     data = np.reshape(board.data, (-1, board.size))
@@ -134,7 +134,7 @@ def animate_2d_heat_map(board, anim = True):
 
     plt.show()
 
-def animate_3d_heat_map(board, anim = True):
+def animate_3d_heat_map(board, anim=True):
     fig = plt.figure()
 
     ax = fig.gca(projection='3d')
@@ -144,7 +144,7 @@ def animate_3d_heat_map(board, anim = True):
     X, Y = np.meshgrid(X, Y)
     Z = np.asarray(np.reshape(board.data, (-1, board.size)))
 
-    mappable = plt.cm.ScalarMappable(cmap = "jet")
+    mappable = plt.cm.ScalarMappable(cmap="jet")
     mappable.set_array(Z)
     mappable.set_clim(0, board.max)
 
@@ -162,7 +162,7 @@ def animate_3d_heat_map(board, anim = True):
             val_map = det_distrib(board)
             board.apply_variations(val_map)
             Z = np.asarray(np.reshape(board.data, (-1, board.size)))
-            surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
+            surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
             ax.set_zlim(0, board.max)
 
         plot = [ax.plot_surface(X, Y, Z, color='0.75')]
