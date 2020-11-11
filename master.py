@@ -108,28 +108,33 @@ def det_distrib(board):
             val_map.data[val_map.get_position(i, j)] = -new_val
     return val_map
 
-def animate_2d_heat_map(board):
+def animate_2d_heat_map(board, anim = True):
     fig = plt.figure()
 
     data = np.reshape(board.data, (-1, board.size))
 
     ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
-    def init():
+    if anim:
+        def init():
+            plt.clf()
+            ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
+
+        def animate(i):
+            plt.clf()
+            val_map = det_distrib(board)
+            board.apply_variations(val_map)
+            data = np.reshape(board.data, (-1, board.size))
+            ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
+
+        anim = animation.FuncAnimation(fig, animate, init_func=init, interval=250)
+    else:
         plt.clf()
         ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
 
-    def animate(i):
-        plt.clf()
-        val_map = det_distrib(board)
-        board.apply_variations(val_map)
-        data = np.reshape(board.data, (-1, board.size))
-        ax = sns.heatmap(data, vmin=0, vmax=board.max, cmap="jet")
-
-    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=250)
     plt.show()
 
-def animate_3d_heat_map(board):
+def animate_3d_heat_map(board, anim = True):
     fig = plt.figure()
 
     ax = fig.gca(projection='3d')
@@ -147,28 +152,33 @@ def animate_3d_heat_map(board):
 
     fig.colorbar(surf)
 
-    def init():
+    if anim:
+        def init():
+            ax.clear()
+            surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
+
+        def animate(i):
+            ax.clear()
+            val_map = det_distrib(board)
+            board.apply_variations(val_map)
+            Z = np.asarray(np.reshape(board.data, (-1, board.size)))
+            surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
+            ax.set_zlim(0, board.max)
+
+        plot = [ax.plot_surface(X, Y, Z, color='0.75')]
+
+        anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
+    else:
         ax.clear()
         surf = ax.plot_surface(X, Y, Z, cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
 
-    def animate(i):
-        ax.clear()
-        val_map = det_distrib(board)
-        board.apply_variations(val_map)
-        Z = np.asarray(np.reshape(board.data, (-1, board.size)))
-        surf = ax.plot_surface(X, Y, Z,  cmap=mappable.cmap, norm=mappable.norm, linewidth=0, antialiased=True)
-        ax.set_zlim(0, board.max)
-
-    plot = [ax.plot_surface(X, Y, Z, color='0.75')]
-    
-    anim = animation.FuncAnimation(fig, animate, init_func=init, interval=1000)
     plt.show()
 
 def main():
     board_data_2d = calculate.get_data('data.csv')
     board_size_2d = int(math.sqrt(len(board_data_2d)))
     board_2d = Board(board_data_2d, board_size_2d)
-    animate_2d_heat_map(board_2d)
+    animate_2d_heat_map(board_2d, False)
 
     board_data_2d_fixed = calculate.get_data('data.csv', True, 13)
     board_size_2d_fixed = int(math.sqrt(len(board_data_2d_fixed)))
@@ -178,7 +188,7 @@ def main():
     board_data_3d = calculate.get_data('data.csv')
     board_size_3d = int(math.sqrt(len(board_data_3d)))
     board_3d = Board(board_data_3d, board_size_3d)
-    animate_3d_heat_map(board_3d)
+    animate_3d_heat_map(board_3d, False)
 
     board_data_3d_fixed = calculate.get_data('data.csv', True, 13)
     board_size_3d_fixed = int(math.sqrt(len(board_data_3d_fixed)))
