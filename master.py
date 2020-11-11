@@ -170,10 +170,20 @@ def main():
     board_2d = Board(board_data_2d, board_size_2d)
     animate_2d_heat_map(board_2d)
 
+    board_data_2d_fixed = calculate.get_data('data.csv', True, 13)
+    board_size_2d_fixed = int(math.sqrt(len(board_data_2d_fixed)))
+    board_2d_fixed = Board(board_data_2d_fixed, board_size_2d_fixed)
+    animate_2d_heat_map(board_2d_fixed)
+
     board_data_3d = calculate.get_data('data.csv')
     board_size_3d = int(math.sqrt(len(board_data_3d)))
     board_3d = Board(board_data_3d, board_size_3d)
     animate_3d_heat_map(board_3d)
+
+    board_data_3d_fixed = calculate.get_data('data.csv', True, 13)
+    board_size_3d_fixed = int(math.sqrt(len(board_data_3d_fixed)))
+    board_3d_fixed = Board(board_data_3d_fixed, board_size_3d_fixed)
+    animate_3d_heat_map(board_3d_fixed)
 
 if __name__ == "__main__":
     main()
