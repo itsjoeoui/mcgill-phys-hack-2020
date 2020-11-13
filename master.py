@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import calculate
+import sys
 
 class Board:
     def __init__(self, data, size):
@@ -175,22 +176,22 @@ def animate_3d_heat_map(board, anim=True):
     plt.show()
 
 def main():
-    board_data_2d = calculate.get_data('data1.csv')
+    board_data_2d = calculate.get_data(sys.argv[1])
     board_size_2d = int(math.sqrt(len(board_data_2d)))
     board_2d = Board(board_data_2d, board_size_2d)
     animate_2d_heat_map(board_2d, False)
 
-    board_data_2d_fixed = calculate.get_data('data1.csv', True, 13)
+    board_data_2d_fixed = calculate.get_data(sys.argv[1], True, 13)
     board_size_2d_fixed = int(math.sqrt(len(board_data_2d_fixed)))
     board_2d_fixed = Board(board_data_2d_fixed, board_size_2d_fixed)
     animate_2d_heat_map(board_2d_fixed)
 
-    board_data_3d = calculate.get_data('data1.csv')
+    board_data_3d = calculate.get_data(sys.argv[1])
     board_size_3d = int(math.sqrt(len(board_data_3d)))
     board_3d = Board(board_data_3d, board_size_3d)
     animate_3d_heat_map(board_3d, False)
 
-    board_data_3d_fixed = calculate.get_data('data1.csv', True, 13)
+    board_data_3d_fixed = calculate.get_data(sys.argv[1], True, 13)
     board_size_3d_fixed = int(math.sqrt(len(board_data_3d_fixed)))
     board_3d_fixed = Board(board_data_3d_fixed, board_size_3d_fixed)
     animate_3d_heat_map(board_3d_fixed)
