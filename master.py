@@ -52,9 +52,9 @@ class Board:
                 self.data[self.get_position(i, j)] += self.velocity[val_map.get_position(i, j)]
         self.velocity += val_map.data
 
-    def add_heat_source(self, x, y, amount):
-        self.data[(self.get_position(x, y))] = amount
-        self.max = amount
+    # def add_heat_source(self, x, y, amount):
+    #     self.data[(self.get_position(x, y))] = amount
+    #     self.max = amount
 
 # Calculates the amount of heat each parcel adjacent to the input parcel gets
 # Input:
