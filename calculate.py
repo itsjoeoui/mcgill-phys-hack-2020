@@ -1,5 +1,5 @@
-import pandas
 import statistics
+import pandas
 
 def get_data(file_name, clean_up=False, divide=0):
 
@@ -59,7 +59,6 @@ def get_data(file_name, clean_up=False, divide=0):
                     if values != []:
                         output_fixed[i] = statistics.mean(values)
         return output_fixed
-    else:
-        return output
+    return output
 
 # get_data('data.csv', True, 13)

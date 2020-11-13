@@ -1,10 +1,10 @@
+import sys
 import math
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import calculate
-import sys
 
 class Board:
     def __init__(self, data, size):
@@ -38,7 +38,7 @@ class Board:
 
     def display_board(self):
         # Simply display the board
-        for i in range(0, len(data), self.size):
+        for i in range(0, len(self.data), self.size):
             print([int(self.data[i + x]) for x in range(self.size)])
 
     def apply_variations(self, val_map):
@@ -140,8 +140,8 @@ def animate_3d_heat_map(board, anim=True):
 
     ax = fig.gca(projection='3d')
 
-    X = [i for i in range(0, board.size)]
-    Y = [j for j in range(0, board.size)]
+    X = list(range(0, board.size))
+    Y = list(range(0, board.size))
     X, Y = np.meshgrid(X, Y)
     Z = np.asarray(np.reshape(board.data, (-1, board.size)))
 
