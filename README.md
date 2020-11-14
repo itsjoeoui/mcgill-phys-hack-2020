@@ -14,3 +14,5 @@ pip3 install matplotlib seaborn pandas
 python3 master.py data1.csv
 python3 master.py data2.csv
 ```
+
+Note: data1.csv and data2.csv are data collected from [p4lab](https://hackathon.p4labs.io/challenge/sandbox.html) using bot.cpp
