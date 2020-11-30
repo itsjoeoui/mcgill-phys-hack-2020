@@ -5,8 +5,10 @@ Made by @izi-on @Shawn13121 @itsjoeoui
 ## Dependencies
 
 ```python
-pip3 install matplotlib seaborn pandas
+pip install matplotlib seaborn pandas
 ```
+
+Or simply do: pip install requirements.txt
 
 ## Usage
 
