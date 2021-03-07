@@ -6,6 +6,8 @@ import numpy as np
 import seaborn as sns
 import calculate
 
+sns.set()
+
 class Board:
     def __init__(self, data, size):
         # Initialize the Board object
